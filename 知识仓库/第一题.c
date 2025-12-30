@@ -1,4 +1,4 @@
-//¼ÆËãÆ÷-Õ»ÊµÏÖ
+//è®¡ç®—å™¨-æ ˆå®ç°
 #include<stdio.h>
 #include<stdio.h>
 #include<string.h>
@@ -6,20 +6,20 @@
 #include<ctype.h>
 #define MAXSIZE 100
 typedef  int  DataType;  
-enum  symbol {NUM, OP, EQ,OTHER};	//·ûºÅÀàĞÍ
-enum  oper {EPT,ADD, MIN, MUL, DIV,  LEFT, RIGHT };		//ÔËËãÀàĞÍ
+enum  symbol {NUM, OP, EQ,OTHER};	//ç¬¦å·ç±»å‹
+enum  oper {EPT,ADD, MIN, MUL, DIV,  LEFT, RIGHT };		//è¿ç®—ç±»å‹
 int Priority[] = {-1,0,0,1,1,2,2};
 union sym {
     DataType num;
     enum oper op;
-} ;		//·ûºÅÖµ 
-DataType Num_stack[MAXSIZE];	//Êı¾İÕ»
-enum oper Op_stack[MAXSIZE];	//·ûºÅÕ»
-int Ntop=-1;	//Êı¾İÕ»¶¥Ö¸Ê¾Æ÷£¬³õÊ¼Îª¿ÕÕ»
-int Otop=-1;	//ÔËËã·ûÕ»¶¥Ö¸Ê¾Æ÷£¬³õÊ¼Îª¿ÕÕ»
-enum symbol getSym( union sym *item);	//´Ó±ê×¼ÊäÈëÖĞ»ñÈ¡Ò»¸ö·ûºÅ£¨Êı¾İ¡¢ÔËËã·û¼°µÈºÅµÈ£©£¬²¢·µ»Ø·ûºÅÀàĞÍ
-void operate(enum oper op );	//²Ù×÷ÔËËã·û£¬µ¯³ö±Èµ±Ç°ÔËËã·ûÓÅÏÈ¼¶¸ßµÄ½øĞĞ¼ÆËã£¬²¢½«ÆäÈëÕ»
-void compute(enum oper op );	//½øĞĞÊµ¼Ê¼ÆËã
+} ;		//ç¬¦å·å€¼ 
+DataType Num_stack[MAXSIZE];	//æ•°æ®æ ˆ
+enum oper Op_stack[MAXSIZE];	//ç¬¦å·æ ˆ
+int Ntop=-1;	//æ•°æ®æ ˆé¡¶æŒ‡ç¤ºå™¨ï¼Œåˆå§‹ä¸ºç©ºæ ˆ
+int Otop=-1;	//è¿ç®—ç¬¦æ ˆé¡¶æŒ‡ç¤ºå™¨ï¼Œåˆå§‹ä¸ºç©ºæ ˆ
+enum symbol getSym( union sym *item);	//ä»æ ‡å‡†è¾“å…¥ä¸­è·å–ä¸€ä¸ªç¬¦å·ï¼ˆæ•°æ®ã€è¿ç®—ç¬¦åŠç­‰å·ç­‰ï¼‰ï¼Œå¹¶è¿”å›ç¬¦å·ç±»å‹
+void operate(enum oper op );	//æ“ä½œè¿ç®—ç¬¦ï¼Œå¼¹å‡ºæ¯”å½“å‰è¿ç®—ç¬¦ä¼˜å…ˆçº§é«˜çš„è¿›è¡Œè®¡ç®—ï¼Œå¹¶å°†å…¶å…¥æ ˆ
+void compute(enum oper op );	//è¿›è¡Œå®é™…è®¡ç®—
 void pushNum(DataType num);
 DataType popNum();
 void pushOp(enum oper op);
@@ -40,9 +40,9 @@ int main()
             return 1;
 		}
     }
-	while(Otop >=0)	//½«Õ»ÖĞÔËËã·ûµ¯³ö½øĞĞ¼ÆËã
+	while(Otop >=0)	//å°†æ ˆä¸­è¿ç®—ç¬¦å¼¹å‡ºè¿›è¡Œè®¡ç®—
 		compute(popOp());
-    if(Ntop == 0)	//Êä³ö¼ÆËã½á¹û
+    if(Ntop == 0)	//è¾“å‡ºè®¡ç®—ç»“æœ
         printf("%d\n", popNum());
     else
         printf("Error in the expression!\n");
@@ -78,12 +78,12 @@ enum symbol getSym( union sym *item)
 void operate(enum oper op )
 {
     enum oper t;
-    if(op != RIGHT){ //µ¯³ö±Èµ±Ç°·ûºÅÓÅÏÈ¼¶¸ßµÄ½øĞĞ¼ÆËã£¬²¢½«µ±Ç°·ûºÅ½øÕ»
+    if(op != RIGHT){ //å¼¹å‡ºæ¯”å½“å‰ç¬¦å·ä¼˜å…ˆçº§é«˜çš„è¿›è¡Œè®¡ç®—ï¼Œå¹¶å°†å½“å‰ç¬¦å·è¿›æ ˆ
         while(Priority[op] <= Priority[topOp()] && topOp() != LEFT)
             compute(popOp());
         pushOp(op);
     }
-    else //µ±Ç°·ûºÅÊÇÓÒÀ¨ºÅ£¬½«Õ»ÖĞ×óÀ¨ºÅÇ°µÄËùÓĞÔËËã·û³öÕ»½øĞĞ¼ÆËã£¬²¢µ¯³ö×óÀ¨ºÅ
+    else //å½“å‰ç¬¦å·æ˜¯å³æ‹¬å·ï¼Œå°†æ ˆä¸­å·¦æ‹¬å·å‰çš„æ‰€æœ‰è¿ç®—ç¬¦å‡ºæ ˆè¿›è¡Œè®¡ç®—ï¼Œå¹¶å¼¹å‡ºå·¦æ‹¬å·
         while((t = popOp()) != LEFT)
             compute(t);
 }
